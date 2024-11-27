@@ -9,11 +9,10 @@ typedef struct {
     int capacity;
 } heap;
 
-heap* create_max_heap(int capacity);
+heap* create_max_heap(int capacity, int* nums);
 void insert_max_heap(heap *heap, int value);
-int extract_max(heap *heap);
-void free_max_heap(heap *heap);
-bool is_empty(heap *heap);
-void print_heap(heap *heap);
+void delete_node(heap *heap);
+void insert_organize(heap* h, int index);
+void max_heapify(heap* h, int index);
 
 #endif

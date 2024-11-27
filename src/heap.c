@@ -10,7 +10,7 @@
  * @param nums 
  * @return heap* 
  */
-heap* createMaxHeap(int capacity, int* nums)
+heap* create_max_heap(int capacity, int* nums)
 {
     heap* h = (heap*)malloc(sizeof(heap));
  
@@ -38,7 +38,7 @@ heap* createMaxHeap(int capacity, int* nums)
     h->size = i;
     i = (h->size - 2) / 2;
     while (i >= 0) {
-        maxHeapify(h, i);
+        max_heapify(h, i);
         i--;
     }
     return h;
@@ -50,12 +50,12 @@ heap* createMaxHeap(int capacity, int* nums)
  * @param h 
  * @param data 
  */
-void insert(heap* h, int data)
+void insert_max_heap(heap* h, int data)
 {
  
     if (h->size < h->capacity) {
         h->arr[h->size] = data;
-        insertOrganize(h, h->size);
+        insert_organize(h, h->size);
         h->size++;
     }
 }
@@ -65,7 +65,7 @@ void insert(heap* h, int data)
  * 
  * @param h 
  */
-void deleteNode(heap* h)
+void delete_node(heap* h)
 {
     int delete;
  
@@ -80,14 +80,14 @@ void deleteNode(heap* h)
     h->arr[0] = h->arr[h->size - 1];
     h->size--;
  
-    maxheapify(h, 0);
+    max_heapify(h, 0);
 }
 
 /**
  * @brief Reorganiza o heap depois de uma inserção
  * 
  */
-void insertOrganize(heap* h, int index)
+void insert_organize(heap* h, int index)
 {
     int parent = (index - 1) / 2;
  
@@ -97,11 +97,11 @@ void insertOrganize(heap* h, int index)
         h->arr[parent] = h->arr[index];
         h->arr[index] = temp;
  
-        insertOrganize(h, parent);
+        insert_organize(h, parent);
     }
 }
 
-void maxHeapify(heap* h, int index)
+void max_heapify(heap* h, int index)
 {
     int left = index * 2 + 1;
     int right = index * 2 + 2;
@@ -122,6 +122,7 @@ void maxHeapify(heap* h, int index)
         int temp = h->arr[max];
         h->arr[max] = h->arr[index];
         h->arr[index] = temp;
-        maxHeapify(h, max);
+ 
+        max_heapify(h, max);
     }
 }
