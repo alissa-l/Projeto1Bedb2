@@ -10,37 +10,12 @@
  * @param nums 
  * @return heap* 
  */
-heap* create_max_heap(int capacity, int* nums)
+heap* create_max_heap(int capacity, Voo* voos)
 {
     heap* h = (heap*)malloc(sizeof(heap));
- 
-    if (h == NULL) {
-        printf("Erro");
-        return NULL;
-    }
-
     h->size = 0;
     h->capacity = capacity;
- 
-    h->arr = (int*)malloc(capacity * sizeof(int));
- 
-    if (h->arr == NULL) {
-        printf("Erro");
-        return NULL;
-    }
-    int i;
-    
-    for (i = 0; i < capacity; i++)
-    {
-        h->arr[i] = nums[i];
-    }
- 
-    h->size = i;
-    i = (h->size - 2) / 2;
-    while (i >= 0) {
-        max_heapify(h, i);
-        i--;
-    }
+    h->arr = (Voo*)malloc(sizeof(Voo) * capacity);
     return h;
 }
 
@@ -50,14 +25,17 @@ heap* create_max_heap(int capacity, int* nums)
  * @param h 
  * @param data 
  */
-void insert_max_heap(heap* h, int data)
+void insert_max_heap(heap* h, Voo value)
 {
- 
-    if (h->size < h->capacity) {
-        h->arr[h->size] = data;
-        insert_organize(h, h->size);
-        h->size++;
+    if (h->size == h->capacity) {
+        printf("Heap cheio\n");
+        return;
     }
+ 
+    h->arr[h->size] = value;
+    h->size++;
+ 
+    insert_organize(h, h->size - 1);
 }
 
 /**
@@ -67,16 +45,11 @@ void insert_max_heap(heap* h, int data)
  */
 void delete_node(heap* h)
 {
-    int delete;
- 
     if (h->size == 0) {
         printf("Heap vazio\n");
         return;
     }
-
-    delete = h->arr[0];
  
-
     h->arr[0] = h->arr[h->size - 1];
     h->size--;
  
@@ -91,37 +64,38 @@ void insert_organize(heap* h, int index)
 {
     int parent = (index - 1) / 2;
  
-    if (h->arr[parent] < h->arr[index]) {
-
-        int temp = h->arr[parent];
-        h->arr[parent] = h->arr[index];
-        h->arr[index] = temp;
+    if (index == 0)
+        return;
+    if (h->arr[index].prioridade > h->arr[parent].prioridade) {
+        Voo temp = h->arr[index];
+        h->arr[index] = h->arr[parent];
+        h->arr[parent] = temp;
  
         insert_organize(h, parent);
     }
 }
 
+/**
+ * @brief Reorganiza o heap depois de uma remoção
+ * 
+ * @param h 
+ * @param index 
+ */
 void max_heapify(heap* h, int index)
 {
-    int left = index * 2 + 1;
-    int right = index * 2 + 2;
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
     int max = index;
-
-    if (left >= h->size || left < 0)
-        left = -1;
-    if (right >= h->size || right < 0)
-        right = -1;
  
-
-    if (left != -1 && h->arr[left] > h->arr[max])
+    if (left < h->size && h->arr[left].prioridade > h->arr[max].prioridade)
         max = left;
-    if (right != -1 && h->arr[right] > h->arr[max])
+    if (right < h->size && h->arr[right].prioridade > h->arr[max].prioridade)
         max = right;
  
     if (max != index) {
-        int temp = h->arr[max];
-        h->arr[max] = h->arr[index];
-        h->arr[index] = temp;
+        Voo temp = h->arr[index];
+        h->arr[index] = h->arr[max];
+        h->arr[max] = temp;
  
         max_heapify(h, max);
     }
